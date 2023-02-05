@@ -1,27 +1,31 @@
-package com.example.jetpackcomposebasics
-
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.jetpackcomposebasics.R
 import com.example.jetpackcomposebasics.ui.theme.JetpackComposeBasicsTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            JetpackComposeBasicsTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    MyApp(modifier = Modifier.fillMaxSize())
+            JetpackComposeBasicsTheme() {
+                Surface() {
+                    MessageCard(Message("Android", "JetpackCompose"))
                 }
             }
         }
@@ -29,73 +33,49 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MyApp(
-    modifier: Modifier = Modifier,
-    names: List<String> = listOf("World", "Compose")
-) {
-    Column(modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
-        for (name in names) {
-            Greeting(name = name)
-        }
-    }
-}
+fun MessageCard(msg: Message) {
 
-@Composable
-private fun Greeting(name: String) {
-    val expanded = remember { mutableStateOf(false) }
-    val extraPadding = if (expanded.value) 48.dp else 0.dp
-    Surface(
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-    ) {
-        Row(modifier = Modifier.padding(24.dp)) {
-            Column(modifier = Modifier
-                .weight(1f)
-                .padding(bottom = extraPadding)) {
-                Text(text = "Hello, ")
-                Text(text = name)
-            }
-            ElevatedButton(
-                onClick = { expanded.value = !expanded.value }
-            ) {
-                Text(if (expanded.value) "Show less" else "Show more")
+    Row(modifier = Modifier.padding(all = 8.dp)) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            contentDescription = "" +
+                    "Contact Profile Picture",
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column {
+            Text(
+                text = msg.author,
+                color = MaterialTheme.colorScheme.secondary,
+                style =
+                MaterialTheme.typography.bodyLarge
+            )
+            Surface(shape = MaterialTheme.shapes.medium, tonalElevation = 1.dp) {
+                Text(text = msg.body)
             }
         }
     }
 }
 
-@Composable
-fun OnboardingScreen(modifier: Modifier = Modifier) {
-    // TODO: This state should be hoisted
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
+data class Message(val author: String, val body: String)
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Welcome to the Basics Codelab!")
-        Button(
-            modifier = Modifier.padding(vertical = 24.dp),
-            onClick = { shouldShowOnboarding = false }
-        ) {
-            Text("Continue")
+//you cannot preview composable functions with parameters directly so we create a new function
+@Preview
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode"
+)
+@Composable
+fun previewComposableFunc() {
+    JetpackComposeBasicsTheme() {
+        Surface() {
+            MessageCard(msg = Message("Psychology", "The study of human nature"))
         }
     }
 }
 
-@Preview(showBackground = true, widthDp = 320, heightDp = 320)
-@Composable
-fun OnboardingPreview() {
-    JetpackComposeBasicsTheme {
-        OnboardingScreen()
-    }
-}
 
-@Preview(showBackground = true, widthDp = 320)
-@Composable
-fun DefaultPreview() {
-    JetpackComposeBasicsTheme {
-        MyApp()
-    }
-}
