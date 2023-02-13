@@ -21,12 +21,27 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import com.codelab.basiclayouts.ui.theme.shapes
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,23 +55,84 @@ class MainActivity : ComponentActivity() {
 fun SearchBar(
     modifier: Modifier = Modifier
 ) {
-    // Implement composable here
+    //we can use the modifier to set the size, process user input, add high level interactions.
+
+    TextField(
+        value = "",
+        onValueChange = {},
+        modifier = modifier
+            .heightIn(min = 56.dp)
+            .fillMaxWidth(),
+        leadingIcon = {
+            Icon(imageVector = Icons.Default.Search, contentDescription = null)
+        },
+        placeholder = {
+            Text(stringResource(R.string.placeholder_search))
+        },
+        colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface)
+
+    )
 }
+//When writing composables, you use modifiers to:
+//Change the composable's size, layout, behavior, and appearance.
+//Add information, like accessibility labels.
+//Process user input.
+//Add high-level interactions, like making an element clickable, scrollable, draggable, or zoomable.
+
 
 // Step: Align your body - Alignment
 @Composable
 fun AlignYourBodyElement(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    // The use of @DrawableRes and @StringRes is optional.
+    // However, by using these annotations, you are providing more information to the
+    // compiler and making it easier for developers to understand how your code is
+    // intended to be used. It ensures type safety.
+    @DrawableRes imgId: Int,
+    @StringRes stringID: Int
+
 ) {
-    // Implement composable here
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            painter = painterResource(id = imgId),
+            contentDescription = null,
+            modifier = modifier
+                .clip(shape = CircleShape)
+                .size(88.dp), contentScale = ContentScale.Crop
+        )
+        Text(
+            text = stringResource(id = stringID),
+            style = MaterialTheme.typography.h3,
+            modifier = Modifier.paddingFromBaseline(top = 24.dp, bottom = 8.dp)
+        )
+
+    }
 }
+
 
 // Step: Favorite collection card - Material Surface
 @Composable
 fun FavoriteCollectionCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @DrawableRes image: Int,
+    @StringRes text: Int
 ) {
-    // Implement composable here
+    Surface(modifier = modifier, shape = MaterialTheme.shapes.small) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.width(192.dp)) {
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.size(56.dp), contentScale = ContentScale.Crop
+            )
+            Text(
+                text = stringResource(id = text),
+                style = MaterialTheme.typography.h3, modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+        }
+    }
+
+
 }
 
 // Step: Align your body row - Arrangements
@@ -120,8 +196,7 @@ private val favoriteCollectionsData = listOf(
 ).map { DrawableStringPair(it.first, it.second) }
 
 private data class DrawableStringPair(
-    @DrawableRes val drawable: Int,
-    @StringRes val text: Int
+    @DrawableRes val drawable: Int, @StringRes val text: Int
 )
 
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
@@ -135,7 +210,9 @@ fun SearchBarPreview() {
 fun AlignYourBodyElementPreview() {
     MySootheTheme {
         AlignYourBodyElement(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            imgId = R.drawable.ab1_inversions,
+            stringID = R.string.ab1_inversions
         )
     }
 }
@@ -145,7 +222,9 @@ fun AlignYourBodyElementPreview() {
 fun FavoriteCollectionCardPreview() {
     MySootheTheme {
         FavoriteCollectionCard(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            image = R.drawable.fc2_nature_meditations,
+            text = R.string.fc2_nature_meditations
         )
     }
 }

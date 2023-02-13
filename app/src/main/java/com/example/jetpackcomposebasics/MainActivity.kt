@@ -71,7 +71,7 @@ fun Greetings(
 private fun Greeting(name: String) {
     var expanded by remember { mutableStateOf(false) }
     val extraPadding by animateDpAsState(
-        targetValue = if (expanded.value) 48.dp else 0.dp, animationSpec = spring(
+        targetValue = if (expanded) 48.dp else 0.dp, animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow
         )
     )
@@ -98,8 +98,8 @@ private fun Greeting(name: String) {
                     }
                 )
             }
-        }
-}
+        }}}
+
 
 @Composable
 fun OnboardingScreen(modifier: Modifier = Modifier, onContinueClicked: () -> Unit) {
@@ -117,7 +117,7 @@ fun OnboardingScreen(modifier: Modifier = Modifier, onContinueClicked: () -> Uni
             Text("Continue")
         }
     }
-}}
+}
 
 
 @Preview(
