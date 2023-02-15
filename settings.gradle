@@ -17,4 +17,3 @@ rootProject.name = "JetpackComposeBasics"
 include ':app'
 include ':jetpackcomposestartertutorial2'
 include ':BasicLayoutsCodelab'
-include ':BasicStateCodelab'
