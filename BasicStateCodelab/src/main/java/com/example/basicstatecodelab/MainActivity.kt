@@ -30,3 +30,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+// important
+/* State should be hoisted to at least the lowest common parent of all composables that use the state (read).
+State should be hoisted to at least the highest level it may be changed (write).
+If two states change in response to the same events they should be hoisted to the same level. */
+//Key Point: A best practice for the design of Composables is to pass them only the parameters they need.
